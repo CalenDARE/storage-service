@@ -5,10 +5,12 @@ import com.calenDARE.storageservice.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/storage-service")
@@ -29,9 +31,15 @@ public class UserController {
         }
     }
 
-    @GetMapping("/getUser/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        Optional<User> user = userRepository.findById(id);
+    @GetMapping("/getUser/id/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable String id) {
+        Optional<User> user = userRepository.findById(Long.parseLong(id));
+        return user.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/getUser/{email}")
+    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
+        Optional<User> user = userRepository.findByEmail(email);
         return user.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
@@ -53,7 +61,7 @@ public class UserController {
                 updatedUserData.setFirstName(user.getFirstName());
                 updatedUserData.setLastName(user.getLastName());
                 updatedUserData.setEmail(user.getEmail());
-                updatedUserData.setPasswort(user.getPasswort());
+                updatedUserData.setPassword(user.getPassword());
 
                 return new ResponseEntity<>(userRepository.save(updatedUserData), HttpStatus.CREATED);
             }
@@ -81,4 +89,28 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+/*
+    @PostMapping("/user/{user}/login")
+    public ResponseEntity<String> login(@RequestBody User user) {
+        String username = user.getEmail();
+        String password = user.getPassword();
+
+        if (isValidCredentials(username, password)) {
+            String authToken = generateAuthToken();
+
+            return new ResponseEntity<>(authToken, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    private boolean isValidCredentials(String email, String password) {
+        User user = userRepository.findByEmail(email).orElseThrow();
+        return user.getPassword().equals(password);
+    }
+
+    private String generateAuthToken() {
+        return UUID.randomUUID().toString();
+    }
+    */
 }
