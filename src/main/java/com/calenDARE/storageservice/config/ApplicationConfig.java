@@ -1,4 +1,4 @@
-package com.calenDARE.storageservice.model;
+package com.calenDARE.storageservice.config;
 
 import com.calenDARE.storageservice.dao.UserRepository;
 import lombok.RequiredArgsConstructor;

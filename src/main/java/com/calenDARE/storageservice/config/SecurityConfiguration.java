@@ -1,5 +1,6 @@
-package com.calenDARE.storageservice.model;
+package com.calenDARE.storageservice.config;
 
+import com.calenDARE.storageservice.model.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
