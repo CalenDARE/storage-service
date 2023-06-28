@@ -34,7 +34,7 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/storage-service/**")
+                .requestMatchers("/storage-service/**", "/**")
                 .permitAll()
                 //.requestMatchers("/storage-service/**")//.hasAnyRole(ADMIN.name(), MANAGER.name())
                 //.requestMatchers(GET, "/storage-service/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
