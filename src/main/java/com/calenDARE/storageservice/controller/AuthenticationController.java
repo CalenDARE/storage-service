@@ -7,13 +7,16 @@ import com.calenDARE.storageservice.services.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.management.openmbean.KeyAlreadyExistsException;
 import java.io.IOException;
+import java.net.http.HttpResponse;
 
 @RestController
 @RequestMapping("/storage-service/auth")
@@ -23,8 +26,14 @@ public class AuthenticationController {
     private final AuthenticationService service;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+        try {
         return ResponseEntity.ok(service.register(request));
+        } catch(KeyAlreadyExistsException e) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Email is already used.");
+        }
     }
 
     @PostMapping("/authenticate")

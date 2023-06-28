@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.management.openmbean.KeyAlreadyExistsException;
 import java.io.IOException;
 
 @Service
@@ -24,7 +25,11 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponse register(RegisterRequest request) throws KeyAlreadyExistsException{
+        if(repository.findByEmail(request.getEmail()).isPresent()) {
+            throw new KeyAlreadyExistsException("Email is already used");
+        }
+
         var user = User.builder()
                 .firstName(request.getFirstname())
                 .lastName(request.getLastname())
