@@ -52,10 +52,10 @@ public class UserController {
         }
     }
 
-    @PutMapping("/updateUser/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+    @PutMapping("/updateUser/{email}")
+    public ResponseEntity<User> updateUser(@PathVariable String email, @RequestBody User user) {
         try {
-            Optional<User> userData = userRepository.findById(id);
+            Optional<User> userData = userRepository.findByEmail(email);
             if (userData.isPresent()) {
                 User updatedUserData = userData.get();
                 updatedUserData.setFirstName(user.getFirstName());
