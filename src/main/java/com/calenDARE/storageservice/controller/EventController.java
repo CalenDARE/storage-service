@@ -36,6 +36,12 @@ public class EventController {
         return event.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping("/getAllEventsForUser/{id}")
+    public ResponseEntity<List<Event>> getAllEventsForUser(@PathVariable Long id) {
+        Optional<List<Event>> events = eventRepository.getEventsByUser_Id(id);
+        return events.map(event -> new ResponseEntity<>(event, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
     @PostMapping("/addEvent")
     public ResponseEntity<Event> addEvent(@RequestBody Event event) {
         try {

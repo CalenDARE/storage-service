@@ -22,7 +22,7 @@ public class Event {
     private String eventName;
 
     @Column(name = "event_date")
-    private String eventDate;
+    private LocalDateTime eventDate;
 
     @Column(name = "create_date")
     private LocalDateTime createDate;
