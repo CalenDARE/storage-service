@@ -67,10 +67,10 @@ public class EventController {
         }
     }
 
-    @DeleteMapping("/deleteEventById/{id}")
-    public ResponseEntity<HttpStatus> deleteEvent(@PathVariable Long id) {
+    @DeleteMapping("/deleteEventById/{eventId}")
+    public ResponseEntity<HttpStatus> deleteEvent(@PathVariable String eventId) {
         try {
-            eventRepository.deleteById(id);
+            eventRepository.deleteByEventId(eventId);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

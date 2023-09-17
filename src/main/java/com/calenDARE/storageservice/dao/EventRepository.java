@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface EventRepository extends JpaRepository<Event, Long> {
 
     Optional<List<Event>> getEventsByUser_Id(Long id);
+    void deleteByEventId(String eventId);
 }
