@@ -6,6 +6,7 @@ import com.calenDARE.storageservice.model.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -67,10 +68,11 @@ public class EventController {
         }
     }
 
-    @DeleteMapping("/deleteEventById/{eventId}")
-    public ResponseEntity<HttpStatus> deleteEvent(@PathVariable String eventId) {
+    @Transactional
+    @DeleteMapping("/deleteEventById/{eventId}/{userId}")
+    public ResponseEntity<HttpStatus> deleteEvent(@PathVariable String eventId, @PathVariable long userId) {
         try {
-            eventRepository.deleteByEventId(eventId);
+            eventRepository.deleteByEventIdAndUser_Id(eventId, userId);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
