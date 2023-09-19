@@ -43,6 +43,17 @@ public class UserController {
         return user.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping("/login/{email}/{password}")
+    public ResponseEntity<User> login(@PathVariable String email, @PathVariable String password) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else if(user.get().getPassword().equals(password)) {
+            return user.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseThrow();
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
     @PostMapping("/addUser")
     public ResponseEntity<User> addUser(@RequestBody User user) {
         try {
@@ -89,7 +100,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-/*
+
     @PostMapping("/user/{user}/login")
     public ResponseEntity<String> login(@RequestBody User user) {
         String username = user.getEmail();
@@ -112,5 +123,5 @@ public class UserController {
     private String generateAuthToken() {
         return UUID.randomUUID().toString();
     }
-    */
+
 }
